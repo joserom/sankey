@@ -1,109 +1,12 @@
-<!DOCTYPE html>
 
-<html>
-<head>
-
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	
-	<script src="resources/extJs/jquery-1.11.0.js"></script>
-	<script charset="utf-8" src="resources/extJs/d3.v3.js"></script>
-	<script src="resources/js/sankey.js"></script>
-	<!--
-    <script src="data\Data_exergy.js"></script>
-    -->
-	<script type="text/javascript" src="resources/extJs/fd-slider.js"></script>
-	
-    <link rel="stylesheet" type="text/css" href="resources/css/sankey.css" />
-	
-	<link rel="stylesheet" type="text/css" href="resources/css/fd-slider5e1f.css?v=2">
-	<link rel="stylesheet" type="text/css" href="resources/css/fd-slider-tooltip.css">
-	<TITLE>Spanish Exergy Sankey</TITLE>
-
-</head>
-
-<body>
-
-	<div id="top" class="top">
-		<div id="topleft" class="topleft">
-        <!--
-			<div>
-				<FORM> 
-					<INPUT type="button" value="Energy Sankey" name="Energy_link"  onClick="window.location='sankey_energy.html'"> 
-				</FORM>
-			</div>
-			<br>
-			<div>
-				<FORM> 
-					<INPUT type="button" value="CO2 Emission Sankey" name="CO2_link"  onClick="window.location='sankey_co2.html'"> 
-				</FORM>
-			</div>
-			<br>
-			<div>
-				<FORM> 
-					<INPUT type="button" value="Monetary Flow Sankey" name="monetary_link"  onClick="window.location='sankey_monetary.html'"> 
-				</FORM>
-			</div>
-			<br>
-         -->  
-			<div class="nytg-navBar">
-				<ul class="nytg-navigation clearfix" style="list-style-type: none">
-					<li id="Button2007">2007</li>
-					<li id="Button2008">2008</li>
-					<li id="Button2009">2009</li>
-					<li id="Button2010">2010</li>
-					<li id="Button2011">2011</li>
-					<li id="Button2012" class="selected">2012</li>
-				</ul>
-			</div>
-
-			<div>
-				<form id="checkbox">
-					<input type="checkbox" name="checkboxEnergyPaths" value="check1" id="CheckBoxField">Show Exergy Source Colors on Sankey
-				</form>
-			</div>
-
-			
-			<div>
-				<form id="slider">
-					<label>Zoom:</label><input type="text" name="Zoom:" min="25" max="500" step="25" value="100" id="sliderBar">
-					<span id="zoomValue">100%</span>
-				</form>
-			</div>		
-			
-		</div>	
-		
-
-			
-		<div id="header">
-			<a href="http://web.upcomillas.es/centros/bp/cent_ener_sost.aspx"  target="_blank"> <img src="resources/img/ICON_catedra_120.png" alt="logo Cátedra"></a>
-			<br>Observatorio de la Energía en España<br>Spanish Exergy Sankey
-			<div class="hint">
-				Choose the sankey year on the left.<br>Zoom or drag nodes to rearrange.<br>Hold the mouse above sankey element for one second or more for more details.
-			</div>
-		</div>
-	</div>	
-	
-	
-	<div id="sankey">
-		<p id="chart" class="chart"></p>
-	</div>
-	
-	<footer id="footer">
-		Developed by Renato Rodrigues and José Carlos Romero - IIT - Instituto de Investigación Tecnológica - Madrid - Spain.
-		<br>Original Sankey Diagram and Data are available under the publication <a href="http://web.upcomillas.es/centros/bp/cent_ener_sost_obse.aspx"> Observatorio de la Energía en España</a>
-		<br>Acknowledgement for d3.js and base code for the sankey diagram to <a href="http://bost.ocks.org/mike/sankey/">Mike Bostok</a>
-		
-	</footer>  
-		
-	<script>	
 		
 		$( document ).ready(function() { // Initialization Code
 		
             //Initializing Global Variables
-			var currentYear = 2012,
+			var currentYear = 2013,
                 initialYear = 2007,
 				initialSankeyWidth = $(window).width() - 70,
-				initialSankeyHeight = $(window).height() - $("#top").height() - $("#footer").height() - 90,
+				initialSankeyHeight = $(window).height() - $("#top").height() - $("#footer").height() - 100 -30,
 				sankeyWidth = initialSankeyWidth,
 				sankeyHeight = initialSankeyHeight,
 				SankeyNodeWidth = 20,
@@ -138,7 +41,7 @@
     			}
 			
 			// Year buttons code
-			$.each([ 2007, 2008, 2009, 2010, 2011, 2012 ], function( index, value ) {
+			$.each([ 2007, 2008, 2009, 2010, 2011, 2012, 2013 ], function( index, value ) {
 				$("#Button"+value).mouseover(function( event ) {
 					$(".selected").removeClass("selected");
 					$("#Button"+value).addClass("selected");
@@ -184,7 +87,7 @@
             
 			var dataTemp = $.ajax({
 				type: 'GET',
-				url: 'data/Data_exergy19.json',
+				url: 'data/Data_exergy23_2013.json',
 				dataType: 'json',
 				success: function() { },
 				data: {},
@@ -211,7 +114,7 @@
 				svg = d3.select(".chart")
 					.append("svg")
 					.attr("width", sankeyWidth)
-					.attr("height", sankeyHeight);
+					.attr("height", sankeyHeight+30);
 				
 				json = new Object();
 				json.nodes = data.nodes;
@@ -779,9 +682,4 @@
 
 		});	// End of initialization code
 		
-	</script>
-
-
-
-</body>
-</html>
+	
