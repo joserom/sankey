@@ -1,10 +1,11 @@
 
 		
-		$( document ).ready(function() { // Initialization Code
+$( document ).ready(function() { // Initialization Code
 		
             //Initializing Global Variables
 			var currentYear = 2013,
                 initialYear = 2007,
+                finalYear = 2013,
 				initialSankeyWidth = $(window).width() - 70,
 				initialSankeyHeight = $(window).height() - $("#top").height() - $("#footer").height() - 100 -30,
 				sankeyWidth = initialSankeyWidth,
@@ -87,12 +88,14 @@
             
 			var dataTemp = $.ajax({
 				type: 'GET',
-				url: 'data/Data_exergy23_2013.json',
+				url: 'data/Data_exergy24_2013.json',
 				dataType: 'json',
 				success: function() { },
 				data: {},
 				async: false
 			});
+            console.log(dataTemp);
+			
             var data = dataTemp.responseJSON
 			console.log(data);
 			var sankeyEnergySourcesData = {};
@@ -207,7 +210,7 @@
 						)
 					.on("mouseover",
 						function(d){
-							d3.select(this).each(function(d) { barData = [];	for (var i=0;i<6;i++) { var element = { label: i+2007  , value: d.Size[i]}; barData.push(element); }});
+							d3.select(this).each(function(d) { console.log(d); barData = [];	for (var i=0;i<(finalYear-initialYear+1);i++) { var element = { label: i+initialYear  , value: d.Size[i]}; barData.push(element); }});
 							var selectedNode = this;
 //								selectedNode.sourceLinks = [];
 //								selectedNode.targetLinks = [];
@@ -281,9 +284,9 @@
 				for (var property in obj.links) {
 					if (obj.links.hasOwnProperty(property)) {
 						propertyRoot = property;
-						obj.links[propertyRoot].value = obj.links[propertyRoot].yearlyValue[year-2007];
+						obj.links[propertyRoot].value = obj.links[propertyRoot].yearlyValue[year-initialYear];
 						for (var property in obj.links[propertyRoot].EnergySources) {
-							obj.links[propertyRoot].EnergySources[property].value = obj.links[propertyRoot].EnergySources[property].yearlyValue[year-2007];
+							obj.links[propertyRoot].EnergySources[property].value = obj.links[propertyRoot].EnergySources[property].yearlyValue[year-initialYear];
 						}
 					}
 				}	
@@ -293,9 +296,9 @@
 			function computeNodeSizesForAllYears() {
 				json.nodes.forEach(function(node) {
 					node.Size = [];
-				});	
-				for (var count=0;count<6;count++) { 
-					ChangeActiveSankeyYear(json,count+2007);
+				});             
+				for (var count=0;count<(finalYear-initialYear+1);count++) { 
+					ChangeActiveSankeyYear(json,count+initialYear);
 					json.nodes.forEach(function(node) {
 						node.sourceLinks = [];
 						node.targetLinks = [];
@@ -418,8 +421,8 @@
 					
 					
 				function tweenPie(b) {
-				  b.innerRadius = 0;
-				  var i = d3.interpolate({startAngle: 0, endAngle: 0}, b);
+                  b.innerRadius = 0;
+                  var i = d3.interpolate({startAngle: 0, endAngle: 0}, b);
 				  return function(t) { return arc(i(t)); };
 				}
 
@@ -591,7 +594,7 @@
 					.attr("x", function(d) { return barChartTopLeftx + x(d.label); })
 					.attr("width", x.rangeBand())
 					.attr("y", function(d) { return AxisX; })
-					.attr("height", function(d) { return - y(d.value); })
+					.attr("height", function(d) { if (- y(d.value)<0) return 0; else return - y(d.value); })
 					.transition()
 					.duration(transitionDurations)
 					.attr("y", function(d) { return barChartTopLefty + y(d.value); })
